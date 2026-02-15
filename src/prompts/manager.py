@@ -35,5 +35,5 @@ The final report must include:
 - A full bibliography with URLs
 - Aim for thoroughness — do not cut corners.    
 
-CRITICAL: The report should be saved as a markdown file in the sandbox.
+CRITICAL: The report should be saved as a markdown file in the sandbox. Make the destination filename descriptive.
 """

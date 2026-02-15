@@ -6,11 +6,15 @@ from tools.search_resarch_papers_on_arxiv_tool import SearchResearchPapersOnArxi
 from tools.text_summarizer_tool import TextSummarizerTool
 from tools.file_system_tool import FileSystemTool
 from callbacks.token_usage import on_step as on_step_monitor_token_usage
+from prompts.manager import get_manager_instructions
+from prompts.search_agent import get_search_agent_instructions
+from prompts.reader_agent import get_reader_agent_instructions
+from prompts.fact_checker_agent import get_fact_checker_agent_instructions
 
 config = {
     "model_id": "gpt-oss-120b",
     "api_base": "http://192.168.1.21:8000/v1",
-    "api_key": "none",
+    "api_key": os.getenv("OPENAI_API_KEY", "none"),
     "temperature": 0.6
 }
 
@@ -34,12 +38,14 @@ search_agent = CodeAgent(
         "json",
         "matplotlib",
         "pandas",
-        "numpy"
+        "numpy",
+        "textwrap"
     ],
     planning_interval=3,
     executor_kwargs={"timeout_seconds": 3600},
     name="search_agent",
-    description="Search agent. Utilize for searching the web, visiting web pages and collect findings. Give it clear research questions."
+    description="Search agent. Utilize for searching the web, visiting web pages and collect findings. Give it clear research questions.",
+    instructions=get_search_agent_instructions()
 )
 
 reader_agent = CodeAgent(
@@ -60,42 +66,73 @@ reader_agent = CodeAgent(
         "json",
         "matplotlib",
         "pandas",
-        "numpy"
+        "numpy",
+        "textwrap"
     ],
     planning_interval=3,
     executor_kwargs={"timeout_seconds": 3600},
     name="reader_agent",
-    description="Extract content from PDFs, summarize large amounts of content and collect findings."
+    description="Extract content from PDFs, summarize large amounts of content and collect findings.",
+    instructions=get_reader_agent_instructions()
 )
 
-
+fact_checker_agent = CodeAgent(
+    max_steps=100,
+    tools=[
+        KagiSearchTool(),
+        VisitWebpageTool(),
+        FileSystemTool()
+    ],
+    model=model,
+    additional_authorized_imports=[
+        "requests",
+        "bs4",
+        "json"
+    ],
+    planning_interval=3,
+    executor_kwargs={"timeout_seconds": 3600},
+    name="fact_checker_agent",
+    description="Fact-checker agent. Verifies the accuracy of a research report by checking citations and claims against their sources. Give it the path to a report in the sandbox.",
+    instructions=get_fact_checker_agent_instructions()
+)
 
 agent = CodeAgent(
     max_steps=100,
-    managed_agents=[search_agent, reader_agent],
-    tools=[],
+    managed_agents=[search_agent, reader_agent, fact_checker_agent],
+    tools=[
+        FileSystemTool()
+    ],
     model=model,
     planning_interval=3,
     executor_kwargs={"timeout_seconds": 3600},
-    instructions="You are a deep research manager. Break research questions into sub-tasks, delegate each to the appropriate agent, and synthesize their results into a comprehensive answer. Always delegate — never try to answer from memory alone.",
+    instructions=get_manager_instructions(),
+    additional_authorized_imports=[
+        "requests",
+        "bs4", 
+        "json",
+        "matplotlib",
+        "pandas",
+        "numpy",
+        "textwrap"
+    ],
     step_callbacks=[on_step_monitor_token_usage]
 )
 
-# print("Ask away...")
-# while True:
-#     print()
-#     query = input("> ")
 
-#     if query.strip() == "/exit":
-#         break
+result = agent.run("""Research the difference between Thunderbolt 4/5 compared to OcuLink.
 
-#     result = agent.run(query)
+We need to understand:
+- Background information about each of the technologies, and their historical context
+- Technical comparisons between the 2 technologies
+- Applications used in each
+- Why Thunderbolt is seemingly more prominent than OcuLink in the consumer market.
+- Use-cases in enterprise environment.
+- Reliability and long-term ROI and cost in devices using either of the technologies
+- Limitations and operating systems support.
 
-#     print(result)
+You may also gather any other additional information not noted above which you may think will be helpful for the reader to know.
 
-result = agent.run("""Research what the general consensus is with regards to which of the 3 starter Pokemon of the original 150 is the strongest.
+Create a comprehensive report about your findings. Cite all sources.
 
-For your final answer, generate a full report (in markdown) of your findings and cite sources.
-
-Save the report as "Final Report.md" in the sandbox.
+CRITICAL: Output final report as a markdown file.
 """)
