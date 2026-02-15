@@ -35,5 +35,8 @@ The final report must include:
 - A full bibliography with URLs
 - Aim for thoroughness — do not cut corners.    
 
+FILESYSTEM:
+- Do NOT use os, shutil, or any Python filesystem modules directly. Always use the file_system tool for all file operations.
+
 CRITICAL: The report should be saved as a markdown file in the sandbox. Make the destination filename descriptive.
 """

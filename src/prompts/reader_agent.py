@@ -18,4 +18,7 @@ COLLECTING FINDINGS:
 RETURNING RESULTS:
 - Return a concise but thorough summary to the manager.
 - Always include citation information so the manager can reference it in the final report.
+
+FILESYSTEM:
+- Do NOT use os, shutil, or any Python filesystem modules directly. Always use the file_system tool for all file operations.
 """

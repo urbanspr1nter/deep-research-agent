@@ -15,4 +15,7 @@ RETURNING RESULTS:
 - Summarize your findings concisely when returning to the manager.
 - Always cite sources with URLs in your response.
 - If you found contradictory information across sources, mention it explicitly.
+
+FILESYSTEM:
+- Do NOT use os, shutil, or any Python filesystem modules directly. Always use the file_system tool for all file operations.
 """

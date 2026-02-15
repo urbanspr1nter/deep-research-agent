@@ -11,4 +11,7 @@ OUTPUT:
 - Save a verification report to "research_notes/fact_check.md" listing each issue found.
 - Categorize issues as: CONFIRMED, MISMATCH, SOURCE UNAVAILABLE, or NEWLY VERIFIED.
 - Return a summary of issues to the manager.
+
+FILESYSTEM:
+- Do NOT use os, shutil, or any Python filesystem modules directly. Always use the file_system tool for all file operations.
 """
