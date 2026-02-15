@@ -1,11 +1,5 @@
-import openai
-import os
-import requests
-import json
 from smolagents.tools import Tool
 
-llm_host = "http://192.168.1.21:8000/v1"
-model = "gpt-oss-120b"
 
 class TextSummarizerTool(Tool):
     name = "summarizer_tool"
@@ -18,16 +12,29 @@ class TextSummarizerTool(Tool):
     }
     output_type = "string"
 
-    def __init__(self):
+    def __init__(
+        self,
+        model: str = "gpt-oss-120b",
+        llm_host_base_url: str = "http://127.0.0.1:8000/v1",
+        llm_host_api_key: str = "none"
+    ):
         super().__init__()
         
+        import openai
+
+        self._llm_host_base_url = llm_host_base_url
+        self._llm_host_api_key = llm_host_api_key
+        self._model = model
+
         self._client = openai.Client(
-            base_url=llm_host,
-            api_key="none"
+            base_url=self._llm_host_base_url,
+            api_key=self._llm_host_api_key
         )
 
     
     def forward(self, content: str) -> str:
+        model = self._model
+
         response = self._client.chat.completions.create(
             model=model,
             messages=[

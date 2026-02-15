@@ -1,5 +1,3 @@
-import os
-import requests
 from smolagents.tools import Tool
 
 class KagiSearchTool(Tool):
@@ -25,12 +23,15 @@ IMPORTANT: Must have the KAGI_API_KEY environment variable set to use this tool.
     def __init__(self, api_key: str = ""):
         super().__init__()
 
+        import os
         self.api_key = api_key or os.getenv("KAGI_API_KEY")
 
         if not self.api_key or len(self.api_key) == 0:
             raise ValueError("Need a Kagi API key!")
 
     def forward(self, query: str, limit: int = 25) -> str:
+        import requests
+
         params = {
             "q": query,
             "limit": limit if limit >= 25 else 25
@@ -53,7 +54,7 @@ IMPORTANT: Must have the KAGI_API_KEY environment variable set to use this tool.
         if "data" in data:
             data = data["data"]
 
-        suggested_search_results = list(filter(lambda s: s["t"] == 1, data))
+        suggested_search_results = [s for s in data if s["t"] == 1]
 
         results = {}
 

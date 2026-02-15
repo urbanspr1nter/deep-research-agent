@@ -1,7 +1,3 @@
-from marker.converters.pdf import PdfConverter
-from marker.models import create_model_dict
-from marker.output import text_from_rendered
-from marker.config.parser import ConfigParser
 from smolagents.tools import Tool
 
 # TODO: Add a tool that can convert PDF to markdown. This will be useful for agents to read and understand PDF content.
@@ -22,6 +18,11 @@ class PdfToMarkdownTool(Tool):
 
 
     def forward(self, pdf_filepath: str):
+        from marker.converters.pdf import PdfConverter
+        from marker.models import create_model_dict
+        from marker.output import text_from_rendered
+        from marker.config.parser import ConfigParser
+        
         config = {
             "output_format": "markdown"
         }
