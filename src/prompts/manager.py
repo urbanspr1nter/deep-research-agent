@@ -34,4 +34,6 @@ The final report must include:
 - A "Contradictions and Limitations" section noting conflicting information
 - A full bibliography with URLs
 - Aim for thoroughness — do not cut corners.    
+
+CRITICAL: The report should be saved as a markdown file in the sandbox.
 """
