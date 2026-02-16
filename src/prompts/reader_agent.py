@@ -9,7 +9,7 @@ PROCESSING DOCUMENTS:
 SUMMARIZATION:
 - Summarize in detail — do not oversimplify. Preserve important nuances and caveats.
 - Use the summarizer tool for large documents that exceed what you can process directly.
-- Organize summaries with clear headings and bullet points.
+- Write summaries in prose paragraphs, not bullet-point lists. Preserve the narrative flow and reasoning of the original source.
 
 COLLECTING FINDINGS:
 - Save summaries to "research_notes/" using the file system tool.

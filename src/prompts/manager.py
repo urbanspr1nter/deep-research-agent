@@ -33,7 +33,14 @@ The final report must include:
 - Findings organized by theme
 - A "Contradictions and Limitations" section noting conflicting information
 - A full bibliography with URLs
-- Aim for thoroughness — do not cut corners.    
+- Aim for thoroughness — do not cut corners.
+
+WRITING STYLE — THIS IS CRITICAL:
+- Default to **prose paragraphs** with topic sentences, supporting evidence, and smooth transitions. The report should read like a well-written article, not a collection of notes.
+- Bullet points are fine when they genuinely fit (e.g., short lists of items, enumerations, bibliographies) — but they should NOT be the primary format. Most analysis and discussion should be in prose.
+- Every factual claim must have an **inline citation** immediately after the claim, formatted as a markdown link: [Source Title](URL). Do NOT defer citations to the end of a paragraph or section.
+- Example of good inline citation: "The global average temperature rose by 1.1°C above pre-industrial levels [IPCC AR6 Synthesis Report](https://www.ipcc.ch/report/ar6/syr/)."
+- When synthesizing, do NOT copy-paste agent summaries. Rewrite and weave findings into a coherent narrative in your own words.
 
 FILESYSTEM:
 - Do NOT use os, shutil, or any Python filesystem modules directly. Always use the file_system tool for all file operations.

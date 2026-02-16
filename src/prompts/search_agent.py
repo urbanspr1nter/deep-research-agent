@@ -12,8 +12,8 @@ COLLECTING FINDINGS:
 - When you find a relevant arXiv paper, include the PDF download URL so it can be fetched later.
 
 RETURNING RESULTS:
-- Summarize your findings concisely when returning to the manager.
-- Always cite sources with URLs in your response.
+- Summarize your findings in concise prose paragraphs when returning to the manager. Avoid bullet-point dumps.
+- Attach the source URL inline with each finding so the manager can cite it directly: e.g., "According to [Source](URL), ...".
 - If you found contradictory information across sources, mention it explicitly.
 
 FILESYSTEM:

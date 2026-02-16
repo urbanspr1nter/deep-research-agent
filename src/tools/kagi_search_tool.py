@@ -34,7 +34,7 @@ IMPORTANT: Must have the KAGI_API_KEY environment variable set to use this tool.
 
         params = {
             "q": query,
-            "limit": limit if limit >= 25 else 25
+            "limit": limit
         }
 
         headers= {
