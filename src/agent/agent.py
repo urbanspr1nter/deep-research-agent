@@ -1,8 +1,9 @@
 import os
 from smolagents import CodeAgent, OpenAIModel, WikipediaSearchTool
-from tools.safe_visit_webpage_tool import SafeVisitWebpageTool
+from tools.fire_crawl_tool import FireCrawlWebpageScraperTool
 from tools.kagi_search_tool import KagiSearchTool
 from tools.pdf_to_markdown import PdfToMarkdownTool
+from tools.safe_visit_webpage_tool import SafeVisitWebpageTool
 from tools.search_resarch_papers_on_arxiv_tool import SearchResearchPapersOnArxivTool
 from tools.text_summarizer_tool import TextSummarizerTool
 from tools.file_system_tool import FileSystemTool
@@ -12,8 +13,8 @@ from prompts.search_agent import get_search_agent_instructions
 from prompts.reader_agent import get_reader_agent_instructions
 from prompts.fact_checker_agent import get_fact_checker_agent_instructions
 
-DEFAULT_MODEL = "gpt-5-mini"
-DEFAULT_API_BASE_URL = "https://api.openai.com/v1"
+DEFAULT_MODEL = "MiniMax-M2.5-Q4_K_XL"
+DEFAULT_API_BASE_URL = "http://10.10.1.100:8000/v1"
 DEFAULT_API_KEY = os.getenv("OPENAI_API_KEY", "none")
 
 model_configs = {
@@ -39,7 +40,7 @@ model_configs = {
         "model_id": DEFAULT_MODEL,
         "api_base": DEFAULT_API_BASE_URL,
         "api_key": DEFAULT_API_KEY,
-        "temperature": 0.1 
+        "temperature": 1.0
     }
 }
 
@@ -58,11 +59,15 @@ config = {
     "planning_interval": 3
 }
 
+VisitWebpageToolInstance = SafeVisitWebpageTool() \
+    if os.getenv("FIRE_CRAWL_API_KEY") is None \
+    else FireCrawlWebpageScraperTool(os.getenv("FIRE_CRAWL_API_KEY"))
+
 search_agent = CodeAgent(
     max_steps=config["max_steps"],
     tools=[
         KagiSearchTool(),
-        SafeVisitWebpageTool(),
+        VisitWebpageToolInstance,
         FileSystemTool(),
         WikipediaSearchTool(
             user_agent="Roger's Deep Researcher (urbanspr1nter@gmail.com)"
@@ -102,7 +107,7 @@ fact_checker_agent = CodeAgent(
     max_steps=config["max_steps"],
     tools=[
         KagiSearchTool(),
-        SafeVisitWebpageTool(),
+        VisitWebpageToolInstance,
         FileSystemTool()
     ],
     model=OpenAIModel(**model_configs["fact_checker_agent"]),
@@ -129,20 +134,11 @@ agent = CodeAgent(
 )
 
 
-result = agent.run("""Research the difference between Thunderbolt 4/5 compared to OcuLink.
+result = agent.run("""Perform a deep analysis in why modern movies (~2020s) seem desaturated in colors with flat lighting effects. Compare it with movies of the past (specifically before streaming services)
 
-We need to understand:
-- Background information about each of the technologies, and their historical context
-- Technical comparisons between the 2 technologies
-- Applications used in each
-- Why Thunderbolt is seemingly more prominent than OcuLink in the consumer market.
-- Use-cases in enterprise environment.
-- Reliability and long-term ROI and cost in devices using either of the technologies
-- Limitations and operating systems support.
+Additionally if you find any other interesting viewpoints, please discuss. 
 
-You may also gather any other additional information not noted above which you may think will be helpful for the reader to know.
-
-Create a comprehensive report about your findings. Cite all sources.
+Create a comprehensive report of your findings. Cite your sources.
 
 CRITICAL: Output final report as a markdown file.
 """)
