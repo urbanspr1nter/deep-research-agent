@@ -70,7 +70,7 @@ search_agent = CodeAgent(
         VisitWebpageToolInstance,
         FileSystemTool(),
         WikipediaSearchTool(
-            user_agent="Roger's Deep Researcher (urbanspr1nter@gmail.com)"
+            user_agent="Roger's Deep Researcher (email@example.com)"
         ),
         SearchResearchPapersOnArxivTool()
     ],
