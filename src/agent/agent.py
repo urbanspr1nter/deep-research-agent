@@ -13,8 +13,8 @@ from prompts.search_agent import get_search_agent_instructions
 from prompts.reader_agent import get_reader_agent_instructions
 from prompts.fact_checker_agent import get_fact_checker_agent_instructions
 
-DEFAULT_MODEL = "MiniMax-M2.5-Q4_K_XL"
-DEFAULT_API_BASE_URL = "http://10.10.1.100:8000/v1"
+DEFAULT_MODEL = "qwen3.5-27b"
+DEFAULT_API_BASE_URL = "http://127.0.0.1:8000/v1"
 DEFAULT_API_KEY = os.getenv("OPENAI_API_KEY", "none")
 
 model_configs = {
@@ -28,24 +28,24 @@ model_configs = {
         "model_id": DEFAULT_MODEL,
         "api_base": DEFAULT_API_BASE_URL,
         "api_key": DEFAULT_API_KEY,
-        "temperature": 1.0
+        "temperature": 0.6
     },
     "reader_agent": {
         "model_id": DEFAULT_MODEL,
         "api_base": DEFAULT_API_BASE_URL,
         "api_key": DEFAULT_API_KEY,
-        "temperature": 1.0
+        "temperature": 0.2 
     },
     "fact_checker_agent": {
         "model_id": DEFAULT_MODEL,
         "api_base": DEFAULT_API_BASE_URL,
         "api_key": DEFAULT_API_KEY,
-        "temperature": 1.0
+        "temperature": 0.2
     }
 }
 
 config = {
-    "max_steps": 25,
+    "max_steps": 20,
     "additional_authorized_imports": [
         "requests",
         "bs4",
@@ -134,9 +134,20 @@ agent = CodeAgent(
 )
 
 
-result = agent.run("""Perform a deep analysis in why modern movies (~2020s) seem desaturated in colors with flat lighting effects. Compare it with movies of the past (specifically before streaming services)
+result = agent.run("""Perform a deep-dive analysis in how I can use my mini-PC in the year 2026 for seamless retro gaming.
 
-Additionally if you find any other interesting viewpoints, please discuss. 
+My PC specs:
+- Core Ultra 7 258V (Lunar Lake) CPU
+- 32 GB LPDDR5X 8533 MT/s
+- 1 TB disk
+
+Guidelines:
+- I am flexible on the OS necessary to pull this off. I have a TV and can get controllers.
+- The games I want to emulate are anything in the PS2 and older generation.
+- I want to play with my daughter and introduce her to retro games
+- I want to be able to control the mini PC from the TV using just game controllers.
+- Game controllers I was thinking of are wireless 8bitdo controllers.
+- Low maintenance
 
 Create a comprehensive report of your findings. Cite your sources.
 
