@@ -133,23 +133,10 @@ agent = CodeAgent(
     step_callbacks=[on_step_monitor_token_usage]
 )
 
+with open("prompt.txt", "r") as f:
+    prompt = f.read()
 
-result = agent.run("""Perform a deep-dive analysis in how I can use my mini-PC in the year 2026 for seamless retro gaming.
+    result = agent.run(f"""{prompt}
 
-My PC specs:
-- Core Ultra 7 258V (Lunar Lake) CPU
-- 32 GB LPDDR5X 8533 MT/s
-- 1 TB disk
-
-Guidelines:
-- I am flexible on the OS necessary to pull this off. I have a TV and can get controllers.
-- The games I want to emulate are anything in the PS2 and older generation.
-- I want to play with my daughter and introduce her to retro games
-- I want to be able to control the mini PC from the TV using just game controllers.
-- Game controllers I was thinking of are wireless 8bitdo controllers.
-- Low maintenance
-
-Create a comprehensive report of your findings. Cite your sources.
-
-CRITICAL: Output final report as a markdown file.
-""")
+CRITICAL: Output final report as a markdown file named: final_report.md
+    """)
